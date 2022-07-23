@@ -57,11 +57,13 @@ function willYouMarryMe(isPositiveAnswer) {
  *    })
  *
  */
-function processAllPromises(/* array */) {
-  throw new Error('Not implemented');
-  // return new Promise((res) => {
-  //   res(array.map((prom, ind) => ind + 1));
-  // });
+function processAllPromises(array) {
+  const arr = new Promise((res) => {
+    const responses = [];
+    array.map((item) => item.then((x) => responses.push(x)).catch(() => {}));
+    return res(responses);
+  });
+  return arr;
 }
 
 /**
@@ -105,22 +107,25 @@ function getFastestPromise(array) {
  *
  */
 function chainPromises(array, action) {
-  const arr = new Promise((res, rej) => {
+  const arr = new Promise((res) => {
     const responses = [];
     const rejected = [];
     try {
       array.map(async (item, ind) => {
-        const temp = await item;
-        responses.push(temp);
+        let temp;
+        try {
+          temp = await item;
+          responses.push(temp);
+        } catch (error) {
+          rejected.push(item);
+        }
+
         if (ind === array.length - 1) {
-          if (rejected.length > 0) {
-            rej(rejected);
-          } else res(responses);
+          res(responses);
         }
       });
     } catch (error) {
-      rejected.push(error);
-      rej(error);
+      throw new Error(error);
     }
   });
   return arr.then((arrays) => arrays.reduce((acc, curr) => action(acc, curr)));
