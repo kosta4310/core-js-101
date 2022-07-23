@@ -109,7 +109,7 @@ function getFastestPromise(array) {
 function chainPromises(array, action) {
   const arr = new Promise((res) => {
     const responses = [];
-    const rejected = [];
+    // const rejected = [];
     try {
       array.map(async (item, ind) => {
         let temp;
@@ -117,7 +117,7 @@ function chainPromises(array, action) {
           temp = await item;
           responses.push(temp);
         } catch (error) {
-          rejected.push(item);
+          responses.push(item);
         }
 
         if (ind === array.length - 1) {
@@ -125,7 +125,7 @@ function chainPromises(array, action) {
         }
       });
     } catch (error) {
-      throw new Error(error);
+      // throw new Error(error);
     }
   });
   return arr.then((arrays) => arrays.reduce((acc, curr) => action(acc, curr)));
