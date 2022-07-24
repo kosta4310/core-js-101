@@ -89,13 +89,11 @@ function getPolynom() {
     const first = a * x * x;
     return (
       first
-      // eslint-disable-next-line func-names
-      + (function () {
+      + (function k() {
         const two = b * x;
         return (
           two
-          // eslint-disable-next-line func-names
-          + (function () {
+          + (function n() {
             return c;
           }())
         );
@@ -119,8 +117,12 @@ function getPolynom() {
  *   ...
  *   memoizer() => the same random number  (next run, returns the previous cached result)
  */
-function memoize(/* func */) {
-  throw new Error('Not implemented');
+function memoize(func) {
+  const cache = {};
+  return function n() {
+    // eslint-disable-next-line no-unused-expressions
+    (cache.f ? cache.f : (cache.f = func()));
+  };
 }
 
 
@@ -139,10 +141,18 @@ function memoize(/* func */) {
  * }, 2);
  * retryer() => 2
  */
-function retry(/* func, attempts */) {
-  throw new Error('Not implemented');
+function retry(func, attempts) {
+  // eslint-disable-next-line no-unused-vars
+  let count = attempts;
+  return function n() {
+    try {
+      return func();
+    } catch (error) {
+      count -= 1;
+      return n();
+    }
+  };
 }
-
 
 /**
  * Returns the logging wrapper for the specified method,
@@ -185,8 +195,10 @@ function logger(/* func, logFunc */) {
  *   partialUsingArguments(fn, 'a','b','c')('d') => 'abcd'
  *   partialUsingArguments(fn, 'a','b','c','d')() => 'abcd'
  */
-function partialUsingArguments(/* fn, ...args1 */) {
-  throw new Error('Not implemented');
+function partialUsingArguments(fn, ...args1) {
+  return function n(...args2) {
+    return fn(...args1.concat(args2));
+  };
 }
 
 
@@ -207,8 +219,12 @@ function partialUsingArguments(/* fn, ...args1 */) {
  *   getId4() => 7
  *   getId10() => 11
  */
-function getIdGeneratorFunction(/* startFrom */) {
-  throw new Error('Not implemented');
+function getIdGeneratorFunction(startFrom) {
+  let count = startFrom;
+  return function f() {
+    // eslint-disable-next-line no-plusplus
+    return count++;
+  };
 }
 
 
