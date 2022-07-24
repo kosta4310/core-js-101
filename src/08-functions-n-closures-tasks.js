@@ -89,10 +89,12 @@ function getPolynom() {
     const first = a * x * x;
     return (
       first
+      // eslint-disable-next-line func-names
       + (function () {
         const two = b * x;
         return (
           two
+          // eslint-disable-next-line func-names
           + (function () {
             return c;
           }())
