@@ -434,8 +434,27 @@ function toNaryString(num, n) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/verbalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(pathes) {
+  const arrPathes = pathes.map((item) => item.split('/'));
+  let directoryPath = '';
+  arrPathes.sort((a, b) => a.length - b.length);
+  const [sample] = arrPathes;
+
+  for (let i = 0; i < sample.length; i += 1) {
+    let isSame = true;
+    for (let j = 0; j < arrPathes.length; j += 1) {
+      const element = arrPathes[j][i];
+      if (element !== sample[i]) {
+        isSame = false;
+      }
+      if (isSame && j === arrPathes.length - 1) {
+        directoryPath += `${element}/`;
+      } else if (!isSame) {
+        return directoryPath;
+      }
+    }
+  }
+  return directoryPath;
 }
 
 
@@ -457,8 +476,20 @@ function getCommonDirectoryPath(/* pathes */) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  const rowsM1 = m1.length;
+  const rowsM2 = m2.length;
+  const colsM2 = m2[0].length;
+  const res = [];
+  for (let i = 0; i < rowsM1; i += 1) res[i] = [];
+  for (let k = 0; k < colsM2; k += 1) {
+    for (let i = 0; i < rowsM1; i += 1) {
+      let temp = 0;
+      for (let j = 0; j < rowsM2; j += 1) temp += m1[i][j] * m2[j][k];
+      res[i][k] = temp;
+    }
+  }
+  return res;
 }
 
 
@@ -492,8 +523,43 @@ function getMatrixProduct(/* m1, m2 */) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+function evaluateTicTacToePosition(position) {
+  const p1 = position[0][0];
+  const p2 = position[0][1];
+  const p3 = position[0][2];
+  const p4 = position[1][0];
+  const p5 = position[1][1];
+  const p6 = position[1][2];
+  const p7 = position[2][0];
+  const p8 = position[2][1];
+  const p9 = position[2][2];
+  const arr = [
+    [p1, p2, p3],
+    [p4, p5, p6],
+    [p7, p8, p9],
+    [p1, p4, p7],
+    [p2, p5, p8],
+    [p3, p6, p9],
+    [p1, p5, p9],
+    [p3, p5, p7],
+  ];
+  function check(arrayOfThree) {
+    const [first] = arrayOfThree;
+    for (let i = 1; i < arrayOfThree.length; i += 1) {
+      const element = arrayOfThree[i];
+      if (element !== first) {
+        return false;
+      }
+    }
+    return true;
+  }
+  for (let i = 0; i < arr.length; i += 1) {
+    const element = arr[i];
+    if (check(element) && element[0]) {
+      return element[0];
+    }
+  }
+  return undefined;
 }
 
 
