@@ -1,3 +1,4 @@
+/* eslint-disable wrap-iife */
 /* *********************************************************************************************
  *                                                                                             *
  * Please read the following tutorial before implementing tasks:                                *
@@ -23,8 +24,11 @@
  *   getComposition(Math.sin, Math.asin)(x) => Math.sin(Math.asin(x))
  *
  */
-function getComposition(/* f, g */) {
-  throw new Error('Not implemented');
+function getComposition(f, g) {
+  return function res(x) {
+    const r = g(x);
+    return f(r);
+  };
 }
 
 
@@ -44,8 +48,8 @@ function getComposition(/* f, g */) {
  *   power05(16) => 4
  *
  */
-function getPowerFunction(/* exponent */) {
-  throw new Error('Not implemented');
+function getPowerFunction(exponent) {
+  return (x) => x ** exponent;
 }
 
 
@@ -63,7 +67,39 @@ function getPowerFunction(/* exponent */) {
  *   getPolynom()      => null
  */
 function getPolynom() {
-  throw new Error('Not implemented');
+  if (!arguments.length) return null;
+  let a;
+  let b;
+  let c;
+  if (arguments.length === 2) {
+    a = 0;
+    // eslint-disable-next-line prefer-rest-params
+    [b, c] = arguments;
+  } else if (arguments.length === 1) {
+    a = 0;
+    b = 0;
+    // eslint-disable-next-line prefer-rest-params
+    [c] = arguments;
+  } else {
+    // eslint-disable-next-line prefer-rest-params
+    const arr = [...arguments];
+    [c, b, a] = arr.reverse();
+  }
+  return (x) => {
+    const first = a * x * x;
+    return (
+      first
+      + (function () {
+        const two = b * x;
+        return (
+          two
+          + (function () {
+            return c;
+          }())
+        );
+      })()
+    );
+  };
 }
 
 
